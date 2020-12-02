@@ -1,5 +1,5 @@
 # Tinycache
-Tinycache is a minimal, thread-safe, expiring key/value store for strings
+Tinycache is a minimal, concurrency-safe, expiring key/value store for strings
 
 # Usage
 ``` go 

@@ -1,4 +1,4 @@
-// Package tinycache provides a minimal, thread-safe, expiring key/value store for strings.
+// Package tinycache is a minimal, thread-safe, expiring key/value store for strings.
 
 package tinycache
 

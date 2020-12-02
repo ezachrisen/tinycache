@@ -1,6 +1,8 @@
 package tinycache_test
 
 import (
+	"math/rand"
+	"sync"
 	"testing"
 	"time"
 
@@ -31,4 +33,36 @@ func TestCache(t *testing.T) {
 	is.True(ok)
 	is.Equal(m, "mouse")
 
+}
+
+func TestConcurrency(t *testing.T) {
+
+	var wg sync.WaitGroup
+
+	c := cache.NewCache()
+
+	for i := 1; i <= 10000; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			rand.Seed(time.Now().UnixNano())
+			min := 1
+			max := 30
+			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
+			c.Set("donald", "duck", 50000*time.Millisecond)
+		}()
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			rand.Seed(time.Now().UnixNano())
+			min := 1
+			max := 30
+			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
+			if _, ok := c.Get("donald"); !ok {
+				t.Fatal("Couldn't get donald")
+			}
+		}()
+	}
+
+	wg.Wait()
 }
