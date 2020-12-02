@@ -3,10 +3,9 @@ Tinycache is a minimal, thread-safe, expiring key/value store for strings
 
 # Usage
 ``` go 
-mport (
+import (
 	"fmt"
 	"time"
-
 	cache "github.com/ezachrisen/tinycache"
 )
 
