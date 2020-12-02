@@ -1,0 +1,11 @@
+# Mac
+**/.DS_Store
+
+# Emacs
+**/.dir-locals.el
+**/#*#
+
+# VS Code
+*.code-workspace
+.vscode/
+
