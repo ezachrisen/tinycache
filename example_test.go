@@ -1,9 +1,6 @@
-# Tinycache
-Tinycache is a minimal, thread-safe, expiring key/value store for strings
+package tinycache_test
 
-# Usage
-``` go 
-mport (
+import (
 	"fmt"
 	"time"
 
@@ -11,6 +8,7 @@ mport (
 )
 
 func ExampleCache() {
+
 	c := cache.NewCache()
 	c.Set("donald", "duck", 1000*time.Millisecond)
 
@@ -19,5 +17,3 @@ func ExampleCache() {
 	}
 	// Output: donald duck
 }
-
-```
