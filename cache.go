@@ -18,6 +18,7 @@ const (
 	NoExpiration time.Duration = 1<<63 - 62135596801
 )
 
+// an entry in the cache. User supplies the payload string.
 type entry struct {
 	payload    string
 	expiration time.Time

@@ -16,7 +16,7 @@ func TestCache(t *testing.T) {
 
 	c := cache.NewCache()
 
-	c.Set("donald", "duck", 1000*time.Millisecond)
+	c.Set("donald", "duck", 900*time.Millisecond)
 
 	d, ok := c.Get("donald")
 	is.True(ok)

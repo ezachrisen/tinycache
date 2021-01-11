@@ -21,7 +21,7 @@ func ExampleSuccess() {
 // Example of a cache entry expiring
 func ExampleExpired() {
 	c := cache.NewCache()
-	c.Set("donald", "duck", 1000*time.Millisecond)
+	c.Set("donald", "duck", 900*time.Millisecond)
 	time.Sleep(time.Duration(time.Millisecond) * 1000)
 
 	if d, ok := c.Get("donald"); ok {
