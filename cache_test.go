@@ -35,7 +35,39 @@ func TestCache(t *testing.T) {
 
 }
 
-func TestConcurrency(t *testing.T) {
+func TestConcurrencyNoExpirations(t *testing.T) {
+
+	var wg sync.WaitGroup
+
+	c := cache.NewCache()
+
+	for i := 1; i <= 100000; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			rand.Seed(time.Now().UnixNano())
+			min := 1
+			max := 30
+			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
+			c.Set("mickey", "mouse", 1000*time.Second)
+		}()
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			rand.Seed(time.Now().UnixNano())
+			min := 1
+			max := 30
+			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
+			if _, ok := c.Get("mickey"); !ok {
+				t.Fatal("Couldn't get mickey")
+			}
+		}()
+	}
+
+	wg.Wait()
+}
+
+func TestConcurrencyWithExpirations(t *testing.T) {
 
 	var wg sync.WaitGroup
 
@@ -49,7 +81,9 @@ func TestConcurrency(t *testing.T) {
 			min := 1
 			max := 30
 			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
-			c.Set("donald", "duck", 50000*time.Millisecond)
+
+			ttl := time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min)))
+			c.Set("minnie", "mouse", ttl)
 		}()
 		wg.Add(1)
 		go func() {
@@ -58,9 +92,9 @@ func TestConcurrency(t *testing.T) {
 			min := 1
 			max := 30
 			time.Sleep(time.Duration(time.Millisecond * time.Duration((rand.Intn(max-min+1) + min))))
-			if _, ok := c.Get("donald"); !ok {
-				t.Fatal("Couldn't get donald")
-			}
+			// We don't check the return value here. It is expected that
+			// for some invokations, minnie will not be found.
+			c.Get("minnie")
 		}()
 	}
 
